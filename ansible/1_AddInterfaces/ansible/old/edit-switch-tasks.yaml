@@ -1,4 +1,0 @@
-- include_tasks: edit-vpc-tasks.yaml
-  loop: "{{switch.vpc}}"
-  loop_control:
-    loop_var: vpc

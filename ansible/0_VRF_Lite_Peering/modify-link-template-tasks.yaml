@@ -3,15 +3,16 @@
     msg: "{{ idx }}"
 - name: Set Details 1
   set_fact:
-    dc_num: "{{item['sw1-info']['fabric-name'][-1]}}"
-    ip_octet: "{{ 253- (idx|int * 4)}}"
+    # dc_num: "{{item['sw1-info']['fabric-name'][-1]}}"
+    ip_octet: "{{ 253- ((idx|int + offset) * 4)}}"
+  when:
 - name: Set Details 2
   set_fact:
     neighbor_octet: "{{ip_octet|int + 1}}"
 - name: Set Details 3
   set_fact:
-    asn: "650{{pod_num}}{{dc_num}}"
-    neighbor_asn: "650{{pod_num}}0"
+    # asn: "6501{{dc_num}}"
+    # neighbor_asn: "65010"
     sourceFabric: "{{item['sw1-info']['fabric-name']}}"
     destinationFabric: "{{item['sw2-info']['fabric-name']}}"
     sourceInterface: "{{item['sw1-info']['if-name']}}"
@@ -22,6 +23,16 @@
     destinationDevice: "{{item['sw2-info']['sw-serial-number']}}"
     sourceSwitchName: "{{item['sw1-info']['sw-sys-name']}}"
     destinationSwitchName: "{{item['sw2-info']['sw-sys-name']}}"
+- name: Set ASN Details 1
+  set_fact:
+    asn: "6501{{dc_num}}"
+    neighbor_asn: "65010"
+  when: item['sw2-info']['fabric-name'] == "AUTOMATION-LAB-WAN"
+- name: Set ASN Details 2
+  set_fact:
+    asn: "65010"
+    neighbor_asn: "6501{{dc_num}}"
+  when: item['sw1-info']['fabric-name'] == "AUTOMATION-LAB-WAN"
 - name: Display Link Details
   ansible.builtin.debug:
     msg: "{{ item }}"
