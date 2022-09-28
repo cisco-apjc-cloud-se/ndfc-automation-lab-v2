@@ -1,0 +1,23 @@
+---
+- name: IaC Workshop - Trigger Recalculate & Deploy Configuration for Fabrics
+  hosts: ndfc
+  gather_facts: false
+  connection: httpapi
+  collections:
+    - cisco.dcnm
+  vars_prompt:
+    - name: pod_num
+      prompt: Please enter Pod number (0-9)?
+      private: no
+  vars:
+    ansible_command_timeout: 600
+    # ansible_connect_timeout: 180
+  tasks:
+    - name: Recalculate and Deploy DC1
+      vars:
+        dc_num: 1
+      include_tasks: config-deploy-fabric-tasks.yaml
+    - name: Recalculate and Deploy DC2
+      vars:
+        dc_num: 2
+      include_tasks: config-deploy-fabric-tasks.yaml

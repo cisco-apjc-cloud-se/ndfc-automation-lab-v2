@@ -1,0 +1,72 @@
+---
+- name: IaC Workshop - Delete Networks
+  hosts: ndfc
+  gather_facts: false
+  connection: httpapi
+  collections:
+    - cisco.dcnm
+  vars_prompt:
+    - name: pod_num
+      prompt: Enter Pod number to delete
+      private: no
+  tasks:
+    - name: Confirm Deletion
+      pause:
+        prompt: "Are you sure you want to delete networks for Pod #{{pod_num}}? (yes/no)"
+      register: confirm_delete
+    - name: Delete Networks at MSD fabric level
+      dcnm_network:
+        fabric: "AUTOMATION-LAB-MSD"
+        state: deleted
+        config:
+        - net_name: "POD{{pod_num}}-ANSIBLE-NET1"
+          vrf_name: "POD{{pod_num}}-ANSIBLE-VRF1"
+          net_id: "301{{pod_num}}1"
+          net_template: Default_Network_Universal
+          net_extension_template: Default_Network_Extension_Universal
+          vlan_id: "{{pod_num}}1"
+          gw_ip_subnet: "10.1.{{pod_num}}1.1/24"
+          attach:
+          ## LEAFS
+          - ip_address: 100.64.201.7
+            ports:
+              - "Port-channel{{pod_num}}1"
+          - ip_address: 100.64.201.8
+            ports:
+              - "Port-channel{{pod_num}}1"
+          - ip_address: 100.64.201.9
+            ports:
+              - "Port-channel{{pod_num}}1"
+          - ip_address: 100.64.201.10
+            ports:
+              - "Port-channel{{pod_num}}1"
+          ## ABGWS
+          - ip_address: 100.64.201.4
+            ports: []
+          - ip_address: 100.64.201.5
+            ports: []
+          ## VBGWS
+          - ip_address: 100.64.201.66
+            ports:
+              - "Port-channel{{pod_num}}1"
+          - ip_address: 100.64.201.67
+            ports:
+              - "Port-channel{{pod_num}}1"
+          deploy: true
+        - net_name: "POD{{pod_num}}-ANSIBLE-NET2"
+          vrf_name: "POD{{pod_num}}-ANSIBLE-VRF1"
+          net_id: "301{{pod_num}}2"
+          net_template: Default_Network_Universal
+          net_extension_template: Default_Network_Extension_Universal
+          vlan_id: "{{pod_num}}2"
+          gw_ip_subnet: "10.1.{{pod_num}}2.1/24"
+          attach:
+          ## LEAFS
+          - ip_address: 100.64.201.11
+            ports:
+              - "Port-channel{{pod_num}}2"
+          - ip_address: 100.64.201.12
+            ports:
+              - "Port-channel{{pod_num}}2"
+          deploy: true
+      when: confirm_delete.user_input | bool

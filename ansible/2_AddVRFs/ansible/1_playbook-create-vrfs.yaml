@@ -1,0 +1,84 @@
+---
+- name: IaC Workshop - Create VRFs
+  hosts: ndfc
+  gather_facts: false
+  connection: httpapi
+  collections:
+    - cisco.dcnm
+  vars_prompt:
+    - name: pod_num
+      prompt: Please enter Pod number (0-9)?
+      private: no
+  vars:
+    ansible_command_timeout: 300 # requried for dcnm_inventory
+  tasks:
+    - name: Create VRFs at multi-site fabric Level
+      dcnm_vrf:
+        fabric: "AUTOMATION-LAB-MSD"
+        state: merged
+        config:
+        - vrf_name: "POD{{pod_num}}-ANSIBLE-VRF1"
+          vrf_id: "501{{pod_num}}0"
+          vrf_template: Default_VRF_Universal
+          vrf_extension_template: Default_VRF_Extension_Universal
+          vlan_id: "1{{pod_num}}0"
+          service_vrf_template: null
+          attach:
+          ## LEAFS
+          - ip_address: 100.64.201.7
+          - ip_address: 100.64.201.8
+          - ip_address: 100.64.201.9
+          - ip_address: 100.64.201.10
+          - ip_address: 100.64.201.11
+          - ip_address: 100.64.201.12
+          ## ABGWS
+          - ip_address: 100.64.201.4
+            vrf_lite:
+              - peer_vrf: global
+                interface: Ethernet1/5
+                ipv4_addr: "10.255.10{{pod_num}}.1/30"
+                neighbor_ipv4: "10.255.10{{pod_num}}.2"
+                dot1q: "{{pod_num}}1"
+          - ip_address: 100.64.201.5
+            vrf_lite:
+              - peer_vrf: global
+                interface: Ethernet1/5
+                ipv4_addr: "10.255.10{{pod_num}}.5/30"
+                neighbor_ipv4: "10.255.10{{pod_num}}.6"
+                dot1q: "{{pod_num}}1"
+          ## VBGWS
+          - ip_address: 100.64.201.66
+            vrf_lite:
+              - peer_vrf: global
+                interface: Ethernet1/5
+                ipv4_addr: "10.255.10{{pod_num}}.9/30"
+                neighbor_ipv4: "10.255.10{{pod_num}}.10"
+                dot1q: "{{pod_num}}1"
+          - ip_address: 100.64.201.67
+            vrf_lite:
+              - peer_vrf: global
+                interface: Ethernet1/5
+                ipv4_addr: "10.255.10{{pod_num}}.13/30"
+                neighbor_ipv4: "10.255.10{{pod_num}}.14"
+                dot1q: "{{pod_num}}1"
+        - vrf_name: "POD{{pod_num}}-ANSIBLE-VRF2"
+          vrf_id: "501{{pod_num}}1"
+          vrf_template: Default_VRF_Universal
+          vrf_extension_template: Default_VRF_Extension_Universal
+          vlan_id: "1{{pod_num}}1"
+          service_vrf_template: null
+          attach:
+          ## LEAFS
+          - ip_address: 100.64.201.7
+          - ip_address: 100.64.201.8
+          - ip_address: 100.64.201.9
+          - ip_address: 100.64.201.10
+          - ip_address: 100.64.201.11
+          - ip_address: 100.64.201.12
+          ## ABGWS
+          - ip_address: 100.64.201.4
+          - ip_address: 100.64.201.5
+          ## VBGWS
+          - ip_address: "100.64.201.66"
+          - ip_address: "100.64.201.67"
+      ignore_errors: yes

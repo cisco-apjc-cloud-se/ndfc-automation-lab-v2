@@ -1,0 +1,60 @@
+---
+- name: IaC Workshop - Add fabrics
+  hosts: ndfc
+  gather_facts: false
+  connection: httpapi
+  collections:
+    - cisco.dcnm
+  # vars_prompt:
+  #   - name: pod_num
+  #     prompt: Please enter Pod number (0-9)?
+  #     private: no
+  tasks:
+  - name: Build 1st DC JSON Payload from Template
+    vars:
+      dc_num: 1
+      mgmt_gw: "100.64.201.1"
+      dhcp_start: "100.64.201.34"
+      dhcp_stop: "100.64.201.62"
+    set_fact:
+      payload: "{{ lookup('ansible.builtin.template', './fabric_json.j2') }}" # | to_json
+  - name: JSON Payload
+    ansible.builtin.debug:
+      msg: "{{ payload }}"
+  - name: POST New Fabric JSON
+    dcnm_rest:
+      method: POST
+      path: /appcenter/cisco/ndfc/api/v1/lan-fabric/rest/control/fabrics
+      data: "{{ payload | to_json }}"
+    ignore_errors: true
+  - name: Build 2nd DC JSON Payload from Template
+    vars:
+      dc_num: 2
+      mgmt_gw: "100.64.201.65"
+      dhcp_start: "100.64.201.98"
+      dhcp_stop: "100.64.201.126"
+    set_fact:
+      payload: "{{ lookup('ansible.builtin.template', './fabric_json.j2') }}" # | to_json
+  - name: JSON Payload
+    ansible.builtin.debug:
+      msg: "{{ payload }}"
+  - name: POST New Fabric JSON
+    dcnm_rest:
+      method: POST
+      path: /appcenter/cisco/ndfc/api/v1/lan-fabric/rest/control/fabrics
+      data: "{{ payload | to_json }}"
+    ignore_errors: true
+  - name: Build External Fabric JSON Payload from Template
+    set_fact:
+      payload: "{{ lookup('ansible.builtin.template', './ext_json.j2') }}" # | to_json
+  - name: JSON Payload
+    ansible.builtin.debug:
+      msg: "{{ payload }}"
+  - name: POST External Fabric JSON
+    dcnm_rest:
+      method: POST
+      path: /appcenter/cisco/ndfc/api/v1/lan-fabric/rest/control/fabrics
+      data: "{{ payload | to_json }}"
+    ignore_errors: true
+  #   ansible.builtin.debug:
+  #     msg: "{{ result }}"

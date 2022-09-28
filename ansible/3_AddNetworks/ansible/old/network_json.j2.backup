@@ -1,0 +1,16 @@
+{
+  "id": 3,
+  "fabric": "AUTO-POD1-DC2",
+  "networkName": "ANSIBLE-NET11",
+  "displayName": "ANSIBLE-NET11",
+  "networkId": 32001,
+  "networkTemplate": "Default_Network_Universal",
+  "networkExtensionTemplate": "Default_Network_Extension_Universal",
+  "networkTemplateConfig": "{\"gatewayIpAddress\":\"192.168.1.1/24\",\"gatewayIpV6Address\":\"\",\"vlanName\":\"\",\"intfDescription\":\"\",\"mtu\":\"\",\"secondaryGW1\":\"\",\"secondaryGW2\":\"\",\"secondaryGW3\":\"\",\"secondaryGW4\":\"\",\"suppressArp\":\"false\",\"enableIR\":\"false\",\"mcastGroup\":\"239.1.1.1\",\"dhcpServerAddr1\":\"\",\"vrfDhcp\":\"\",\"dhcpServerAddr2\":\"\",\"vrfDhcp2\":\"\",\"dhcpServerAddr3\":\"\",\"vrfDhcp3\":\"\",\"loopbackId\":\"\",\"tag\":\"12345\",\"trmEnabled\":\"\",\"rtBothAuto\":\"\",\"ENABLE_NETFLOW\":\"false\",\"SVI_NETFLOW_MONITOR\":\"\",\"VLAN_NETFLOW_MONITOR\":\"\",\"enableL3OnBorder\":true,\"vlanId\":\"2001\",\"segmentId\":32001,\"vrfName\":\"ANSIBLE-VRF1\",\"nveId\":\"1\",\"isLayer2Only\":false}",
+  "vrf": "ANSIBLE-VRF1",
+  "tenantName": null,
+  "serviceNetworkTemplate": null,
+  "source": null,
+  "interfaceGroups": null,
+  "hierarchicalKey": "AUTO-POD1-DC2"
+}

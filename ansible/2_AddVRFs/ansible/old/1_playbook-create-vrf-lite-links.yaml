@@ -1,0 +1,11 @@
+---
+- name: IaC Workshop - Create VRF Lite Peer Links
+  hosts: ndfc
+  gather_facts: false
+  connection: httpapi
+  collections:
+    - cisco.dcnm
+  vars:
+    pod_num: 1
+  tasks:
+    - name: Create VRF Lite Peer Links

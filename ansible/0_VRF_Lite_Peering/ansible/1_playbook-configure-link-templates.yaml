@@ -1,0 +1,82 @@
+---
+- name: IaC Workshop - VRF Lite Peering Link Templates
+  hosts: ndfc
+  gather_facts: false
+  connection: httpapi
+  collections:
+    - cisco.dcnm
+  # vars_prompt:
+  #   - name: pod_num
+  #     prompt: Please enter Pod number (0-9)?
+  #     private: no
+  vars:
+    dc1_wan_links: []
+    dc2_wan_links: []
+  tasks:
+    - name: QUERY Fabric Links
+      dcnm_rest:
+        method: GET
+        path: "/appcenter/cisco/ndfc/api/v1/lan-fabric/rest/control/links/fabrics/AUTOMATION-LAB-MSD"
+      register: links
+    - name: Filter Result for Links to WAN Fabric
+      vars:
+        data: []
+      set_fact:
+        data: "{{ data + [item] }}"
+      when: item['sw2-info']['fabric-name'] == "AUTOMATION-LAB-WAN" or item['sw1-info']['fabric-name'] == "AUTOMATION-LAB-WAN"
+      loop: "{{ links.response.DATA }}"
+    - name: Display Result
+      ansible.builtin.debug:
+        msg: "{{ data }}"
+    # - name: Set conditional
+    #   set_fact:
+    #     test: "AUTOMATION-LAB-DC1<->AUTOMATION-LAB-WAN"
+    #     reverse_test: "AUTOMATION-LAB-WAN<->AUTOMATION-LAB-DC1"
+    - name: Filter Result for DC1 Links
+      set_fact:
+        dc1_wan_links: "{{ dc1_wan_links + [item] }}"
+      loop: "{{ data }}"
+      when: item['sw2-info']['fabric-name'] == "AUTOMATION-LAB-DC1" or item['sw1-info']['fabric-name'] == "AUTOMATION-LAB-DC1"
+    - name: Modify Link Template for VRF Lite Peering
+      vars:
+        dc_num: 1
+        offset: 0
+      include_tasks: modify-link-template-tasks.yaml
+      loop: "{{dc1_wan_links | sort(attribute='sw1-info.sw-sys-name') }}"
+      loop_control:
+        index_var: idx
+    # - name: Set conditional
+    #   set_fact:
+    #     test: "AUTOMATION-LAB-DC2<->AUTOMATION-LAB-WAN"
+    #     reverse_test: "AUTOMATION-LAB-WAN<->AUTOMATION-LAB-DC2"
+    - name: Filter Result for DC2 Links
+      set_fact:
+        dc2_wan_links: "{{ dc2_wan_links + [item] }}"
+      loop: "{{ data }}"
+      when: item['sw2-info']['fabric-name'] == "AUTOMATION-LAB-DC2" or item['sw1-info']['fabric-name'] == "AUTOMATION-LAB-DC2"
+    - name: Modify Link Template for VRF Lite Peering
+      vars:
+        dc_num: 2
+        offset: 2
+      include_tasks: modify-link-template-tasks.yaml
+      loop: "{{dc2_wan_links | sort(attribute='sw1-info.sw-sys-name') }}" ## sort won't be accurate
+      loop_control:
+        index_var: idx
+      ignore_errors: true
+    # # - name: Display Result DC1
+    # #   ansible.builtin.debug:
+    # #     msg: "{{ dc1_wan_links }}"
+    # # - name: Display Result DC2
+    # #   ansible.builtin.debug:
+    # #     msg: "{{ dc2_wan_links }}"
+    # - name: Merge Link Dictionaries
+    #   set_fact:
+    #     wan_links: "{{ dc1_wan_links + dc2_wan_links }}"
+    # - name: Display Result
+    #   ansible.builtin.debug:
+    #     msg: "{{ wan_links }}"
+    # - name: Modify Link Template for VRF Lite Peering
+    #   include_tasks: modify-link-template-tasks.yaml
+    #   loop: "{{wan_links | sort(attribute='sw1-info.sw-sys-name') }}"
+    #   loop_control:
+    #     index_var: idx

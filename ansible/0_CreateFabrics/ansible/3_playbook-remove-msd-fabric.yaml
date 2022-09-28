@@ -1,0 +1,51 @@
+---
+- name: IaC Workshop - Remove MSD fabric
+  hosts: ndfc
+  gather_facts: false
+  connection: httpapi
+  collections:
+    - cisco.dcnm
+  # vars_prompt:
+  #   - name: pod_num
+  #     prompt: Enter Pod number to delete
+  #     private: no
+  tasks:
+    - name: Confirm Deletion
+      pause:
+        prompt: "Are you sure you want remove the Automation Lab MSD fabric? (yes/no)"
+      register: confirm_delete
+    # - name: Build Ext Fabric JSON Payload
+    #   set_fact:
+    #     payload:
+    #       destFabric: "AUTO-POD{{pod_num}}-MSD"
+    #       sourceFabric: "AUTO-POD{{pod_num}}-WAN"
+    #   when: confirm_delete.user_input | bool
+    # - name: JSON Payload
+    #   ansible.builtin.debug:
+    #     msg: "{{ payload }}"
+    #   when: confirm_delete.user_input | bool
+    # - name: POST MSD Remove External Fabric JSON
+    #   dcnm_rest:
+    #     method: POST
+    #     path: /appcenter/cisco/ndfc/api/v1/lan-fabric/rest/control/fabrics/msdExit
+    #     data: "{{ payload | to_json }}"
+    #   ignore_errors: true
+    #   when: confirm_delete.user_input | bool
+    # - name: Remove Child VXLAN Fabrics from MSD
+    #   vars:
+    #     children:
+    #       - 1
+    #       - 2
+    #   include_tasks: remove-child-tasks.yaml
+    #   loop: "{{children}}"
+    #   loop_control:
+    #     loop_var: dc_num
+    #   ignore_errors: true
+    #   when: confirm_delete.user_input | bool
+    - name: DELETE MSD Fabric JSON
+      dcnm_rest:
+        method: DELETE
+        path: "/appcenter/cisco/ndfc/api/v1/lan-fabric/rest/control/fabrics/AUTOMATION-LAB-MSD"
+        # json_data: "{{ payload }}"
+      ignore_errors: true
+      when: confirm_delete.user_input | bool

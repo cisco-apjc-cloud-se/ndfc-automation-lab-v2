@@ -1,0 +1,21 @@
+{
+  "policy": "int_vpc_trunk_po_member_11_1",
+  "interfaces": [
+    {
+      "serialNumber": "{{switch.serialNumber}}",
+      "fabricName": "AUTO-POD{{pod_num}}-DC{{dc_num}}",
+      "ifName": "{{port}}",
+      "interfaceType": "INTERFACE_ETHERNET",
+      "nvPairs": {
+        "PRIMARY_INTF": "{{vpc.name}}",
+        "PO_ID": "port-channel{{vpc.id}}",
+        "PC_MODE": "active",
+        "ALLOWED_VLANS": "none",
+        "DESC": "",
+        "CONF": "lacp rate fast",
+        "ADMIN_STATE": "true",
+        "INTF_NAME": "{{port}}"
+      }
+    }
+  ]
+}

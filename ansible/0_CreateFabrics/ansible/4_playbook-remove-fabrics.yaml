@@ -1,0 +1,30 @@
+---
+- name: IaC Workshop - Remove child fabrics
+  hosts: ndfc
+  gather_facts: false
+  connection: httpapi
+  collections:
+    - cisco.dcnm
+  # vars_prompt:
+  #   - name: pod_num
+  #     prompt: Enter Pod number to delete
+  #     private: no
+  tasks:
+    - name: Confirm Deletion
+      pause:
+        prompt: "Are you sure you want remove all Automation Lab NFDC fabrics? (yes/no)"
+      register: confirm_delete
+    - name: DELETE All Pod Fabrics JSON
+      vars:
+        fabrics:
+          - DC1
+          - DC2
+          - WAN
+      dcnm_rest:
+        method: DELETE
+        path: "/appcenter/cisco/ndfc/api/v1/lan-fabric/rest/control/fabrics/AUTOMATION-LAB-{{fabric}}"
+      ignore_errors: true
+      loop: "{{fabrics}}"
+      loop_control:
+        loop_var: fabric
+      when: confirm_delete.user_input | bool

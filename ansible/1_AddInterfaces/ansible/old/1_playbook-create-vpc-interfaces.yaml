@@ -1,0 +1,114 @@
+---
+- name: IaC Workshop - Create vPC Interfaces
+  hosts: ndfc
+  gather_facts: false
+  connection: httpapi
+  collections:
+    - cisco.dcnm
+  vars:
+    pod_num: 2
+  tasks:
+    - name: Create vPC interfaces in DC1
+      vars:
+        dc_num: 1
+      dcnm_interface:
+        fabric: "AUTO-POD{{pod_num}}-DC{{dc_num}}"
+        state: merged                         # only choose from [merged, replaced, deleted, overridden, query]
+        config:
+          - name: vpc100                      # should be of the form vpc<port-id>
+            type: vpc                         # choose from this list [pc, vpc, sub_int, lo, eth]
+            switch:                           # provide switches of vPC pair
+              - ["100.64.20{{pod_num}}.4",
+                  "100.64.20{{pod_num}}.5"]
+            deploy: true                      # choose from [true, false]
+            profile:
+              admin_state: true               # choose from [true, false]
+              mode: trunk                     # choose from [trunk, access]
+              peer1_pcid: 100                 # choose between [Min:1, Max:4096], if not given, will be VPC port-id
+              peer2_pcid: 100                 # choose between [Min:1, Max:4096], if not given, will be VPC port-id
+              peer1_members:                  # member interfaces on peer 1
+                - e1/5
+              peer2_members:                  # member interfaces on peer 2
+                - e1/5
+              pc_mode: 'active'               # choose from ['on', 'active', 'passive']
+              bpdu_guard: true                # choose from [true, false, 'no']
+              port_type_fast: true            # choose from [true, false]
+              mtu: jumbo                      # choose from [default, jumbo]
+              peer1_allowed_vlans: none       # choose from [none, all, vlan range]
+              peer2_allowed_vlans: none       # choose from [none, all, vlan range]
+              peer1_description: "VPC 100 - Peer 1"
+              peer2_description: "VPC 100 - Peer 2"
+      ignore_errors: yes
+      timeout: 180
+    - name: Create vPC interfaces in DC2
+      vars:
+        dc_num: 2
+      dcnm_interface:
+        fabric: "AUTO-POD{{pod_num}}-DC{{dc_num}}"
+        state: merged                         # only choose from [merged, replaced, deleted, overridden, query]
+        config:
+          - name: vpc100                      # should be of the form vpc<port-id>
+            type: vpc                         # choose from this list [pc, vpc, sub_int, lo, eth]
+            switch:                           # provide switches of vPC pair
+              - ["100.64.20{{pod_num}}.66",
+                  "100.64.20{{pod_num}}.67"]
+            deploy: true                      # choose from [true, false]
+            profile:
+              admin_state: true               # choose from [true, false]
+              mode: trunk                     # choose from [trunk, access]
+              peer1_pcid: 100                 # choose between [Min:1, Max:4096], if not given, will be VPC port-id
+              peer2_pcid: 100                 # choose between [Min:1, Max:4096], if not given, will be VPC port-id
+              peer1_members:                  # member interfaces on peer 1
+                - e1/5
+              peer2_members:                  # member interfaces on peer 2
+                - e1/5
+              pc_mode: 'active'               # choose from ['on', 'active', 'passive']
+              bpdu_guard: true                # choose from [true, false, 'no']
+              port_type_fast: true            # choose from [true, false]
+              mtu: jumbo                      # choose from [default, jumbo]
+              peer1_allowed_vlans: none       # choose from [none, all, vlan range]
+              peer2_allowed_vlans: none       # choose from [none, all, vlan range]
+              peer1_description: "VPC 100 - Peer 1"
+              peer2_description: "VPC 100 - Peer 2"
+      ignore_errors: yes
+      timeout: 180
+    # - name: Edit vPC Member Interfaces - DC1
+    #   vars:
+    #     dc_num: 1
+    #     switches:
+    #       - serialNumber: 9JV0UUSBF8I
+    #         vpc:
+    #           - name: vPC100
+    #             id: 100
+    #             ports:
+    #               - Ethernet1/5
+    #       - serialNumber: 9KS1O7CNJJG
+    #         vpc:
+    #           - name: vPC100
+    #             id: 100
+    #             ports:
+    #               - Ethernet1/5
+    #   include_tasks: edit-switch-tasks.yaml
+    #   loop: "{{switches}}"
+    #   loop_control:
+    #     loop_var: switch
+    # - name: Edit vPC Member Interfaces - DC2
+    #   vars:
+    #     dc_num: 2
+    #     switches:
+    #       - serialNumber: 9LX3N37XJ76
+    #         vpc:
+    #           - name: vPC100
+    #             id: 100
+    #             ports:
+    #               - Ethernet1/5
+    #       - serialNumber: 9F1CK93TQKZ
+    #         vpc:
+    #           - name: vPC100
+    #             id: 100
+    #             ports:
+    #               - Ethernet1/5
+    #   include_tasks: edit-switch-tasks.yaml
+    #   loop: "{{switches}}"
+    #   loop_control:
+    #     loop_var: switch

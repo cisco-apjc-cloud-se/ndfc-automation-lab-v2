@@ -1,0 +1,39 @@
+- name: Display Loop Index
+  ansible.builtin.debug:
+    msg: "{{ idx }}"
+- name: Set Details 1
+  set_fact:
+    dc_num: "{{item['sw1-info']['fabric-name'][-1]}}"
+    ip_octet: "{{ 253- (idx|int * 4)}}"
+- name: Set Details 2
+  set_fact:
+    neighbor_octet: "{{ip_octet|int + 1}}"
+- name: Set Details 3
+  set_fact:
+    asn: "650{{pod_num}}{{dc_num}}"
+    neighbor_asn: "650{{pod_num}}0"
+    sourceFabric: "{{item['sw1-info']['fabric-name']}}"
+    destinationFabric: "{{item['sw2-info']['fabric-name']}}"
+    sourceInterface: "{{item['sw1-info']['if-name']}}"
+    destinationInterface: "{{item['sw2-info']['if-name']}}"
+    ip_mask: "192.168.254.{{ip_octet}}/30"
+    neighbor_ip: "192.168.254.{{neighbor_octet}}"
+    sourceDevice: "{{item['sw1-info']['sw-serial-number']}}"
+    destinationDevice: "{{item['sw2-info']['sw-serial-number']}}"
+    sourceSwitchName: "{{item['sw1-info']['sw-sys-name']}}"
+    destinationSwitchName: "{{item['sw2-info']['sw-sys-name']}}"
+- name: Display Link Details
+  ansible.builtin.debug:
+    msg: "{{ item }}"
+- name: Build Link JSON Payload from Template
+  set_fact:
+    payload: "{{ lookup('ansible.builtin.template', './link_json.j2') }}"
+- name: JSON Payload
+  ansible.builtin.debug:
+    msg: "{{ payload }}"
+- name: PUT Link Template JSON
+  dcnm_rest:
+    method: PUT
+    path: "/appcenter/cisco/ndfc/api/v1/lan-fabric/rest/control/links/{{item['link-uuid']}}"
+    data: "{{ payload | to_json }}"
+  ignore_errors: true

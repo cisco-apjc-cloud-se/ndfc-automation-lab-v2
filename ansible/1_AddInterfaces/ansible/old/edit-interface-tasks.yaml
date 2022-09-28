@@ -1,0 +1,11 @@
+- name: Build Interface PTI JSON Payload from Template
+  set_fact:
+    payload: "{{ lookup('ansible.builtin.template', './interface_json.j2') | to_json }}"
+- name: JSON Payload
+  ansible.builtin.debug:
+    msg: "{{ payload | to_json }}"
+- name: POST Updated Interface PTI JSON
+  dcnm_rest:
+    method: POST
+    path: "/appcenter/cisco/ndfc/api/v1/lan-fabric/rest/globalInterface/pti?isMultiEdit=false"
+    json_data: "{{ payload }}"

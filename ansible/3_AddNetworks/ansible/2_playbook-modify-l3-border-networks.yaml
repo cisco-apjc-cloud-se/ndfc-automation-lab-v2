@@ -1,0 +1,45 @@
+---
+- name: IaC Workshop - Modify Networks for L3 Border Support
+  hosts: ndfc
+  gather_facts: false
+  connection: httpapi
+  collections:
+    - cisco.dcnm
+  vars_prompt:
+    - name: pod_num
+      prompt: Please enter Pod number (0-9)?
+      private: no
+  vars:
+    ansible_command_timeout: 300 # requried for dcnm_inventory
+  tasks:
+    # - name: Modify Selected Network(s) at DC1 fabric Level
+    #   vars:
+    #     dc_num: 1
+    #     networks:
+    #       - "POD{{pod_num}}-ANSIBLE-NET1"
+    #       # - "POD{[pod_num}}=ANSIBLE-NET2"
+    #   include_tasks: modify-network-tasks.yaml
+    #   loop: "{{networks}}"
+    #   loop_control:
+    #     loop_var: network
+    - name: Modify Selected Network(s) at DC2 fabric Level
+      vars:
+        dc_num: 2
+        networks:
+          - "POD{{pod_num}}-ANSIBLE-NET1"
+          # - "POD{[pod_num}}=ANSIBLE-NET2"
+      include_tasks: modify-network-tasks.yaml
+      loop: "{{networks}}"
+      loop_control:
+        loop_var: network
+    - name: POST Config Deploy for DCs
+      vars:
+        dc_list:
+          # - 1
+          - 2
+      dcnm_rest:
+        method: POST
+        path: "/appcenter/cisco/ndfc/api/v1/lan-fabric/rest/control/fabrics/AUTOMATION-LAB-DC{{item}}/config-deploy"
+        data: null
+      with_items: "{{dc_list}}"
+      ignore_errors: yes

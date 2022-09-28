@@ -1,0 +1,24 @@
+{
+  "sourceFabric": "AUTO-POD1-DC1",
+  "destinationFabric": "AUTO-POD1-WAN",
+  "sourceInterface": "Ethernet1/6",
+  "destinationInterface": "Ethernet1/1",
+  "templateName": "ext_fabric_setup",
+  "nvPairs": {
+    "asn": "65011",
+    "IP_MASK": "192.168.254.253/24",
+    "NEIGHBOR_IP": "192.168.254.254",
+    "NEIGHBOR_ASN": "65010",
+    "MTU": "9216",
+    "AUTO_VRF_LITE_FLAG": "false",
+    "PEER1_DESC": "",
+    "PEER2_DESC": "",
+    "PEER1_CONF": "",
+    "PEER2_CONF": "",
+    "VRF_LITE_JYTHON_TEMPLATE": "Ext_VRF_Lite_Jython"
+  },
+  "sourceDevice": "9K49T1EJVL1",
+  "destinationDevice": "9AJHJSJFFKK",
+  "sourceSwitchName": "DC1-ABGW1",
+  "destinationSwitchName": "WAN"
+}

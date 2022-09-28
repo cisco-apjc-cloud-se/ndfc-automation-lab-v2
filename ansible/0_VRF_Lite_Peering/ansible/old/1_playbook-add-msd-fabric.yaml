@@ -1,0 +1,44 @@
+---
+- name: IaC Workshop - Create Multi-Site Fabric (MSD) and Add Child Fabrics
+  hosts: ndfc
+  gather_facts: false
+  connection: httpapi
+  collections:
+    - cisco.dcnm
+  vars:
+    pod_num: 2
+  tasks:
+    - name: Build MSD JSON Payload from Template
+      set_fact:
+        payload: "{{ lookup('ansible.builtin.template', './fabric_json.j2') | to_json }}"
+    - name: JSON Payload
+      ansible.builtin.debug:
+        msg: "{{ payload | to_json }}"
+    - name: POST New MSD Fabric JSON
+      dcnm_rest:
+        method: POST
+        path: /appcenter/cisco/ndfc/api/v1/lan-fabric/rest/control/fabrics
+        json_data: "{{ payload }}"
+    - name: Add Child VXLAN Fabrics to MSD
+      vars:
+        children:
+          - 1
+          - 2
+      include_tasks: add-child-tasks.yaml
+      loop: "{{children}}"
+      loop_control:
+        loop_var: dc_num
+    - name: Build Ext Fabric JSON Payload
+      set_fact:
+        payload:
+          destFabric: "AUTO-POD{{pod_num}}-MSD"
+          sourceFabric: "AUTO-POD{{pod_num}}-WAN"
+    - name: JSON Payload
+      ansible.builtin.debug:
+        msg: "{{ payload }}"
+    - name: POST MSD Add External Fabric JSON
+      dcnm_rest:
+        method: POST
+        path: /appcenter/cisco/ndfc/api/v1/lan-fabric/rest/control/fabrics/msdAdd
+        data: "{{ payload | to_json }}"
+      ignore_errors: true

@@ -1,0 +1,122 @@
+---
+- name: IaC Workshop - Create vPC Interfaces
+  hosts: ndfc
+  gather_facts: false
+  connection: httpapi
+  collections:
+    - cisco.dcnm
+  vars_prompt:
+    - name: pod_num
+      prompt: Please enter Pod number (0-9)?
+      private: no
+  vars:
+    ansible_command_timeout: 300 # requried for dcnm_inventory
+  tasks:
+    - name: Create vPC interfaces in DC1
+      dcnm_interface:
+        fabric: "AUTOMATION-LAB-DC1"
+        state: merged                         # only choose from [merged, replaced, deleted, overridden, query]
+        config:
+          ### Leaf1/2 VPC ###
+          - name: vpc{{pod_num}}1             # should be of the form vpc<port-id>
+            type: vpc                         # choose from this list [pc, vpc, sub_int, lo, eth]
+            switch:                           # provide switches of vPC pair
+              - ["100.64.201.7",
+                  "100.64.201.8"]
+            deploy: true                      # choose from [true, false]
+            profile:
+              admin_state: true               # choose from [true, false]
+              mode: trunk                     # choose from [trunk, access]
+              peer1_pcid: "{{pod_num}}1"      # choose between [Min:1, Max:4096], if not given, will be VPC port-id
+              peer2_pcid: "{{pod_num}}1"      # choose between [Min:1, Max:4096], if not given, will be VPC port-id
+              peer1_members:                  # member interfaces on peer 1
+                - "e1/{{pod_num|int + 5}}"
+              peer2_members:                  # member interfaces on peer 2
+                - "e1/{{pod_num|int + 5}}"
+              pc_mode: 'active'               # choose from ['on', 'active', 'passive']
+              bpdu_guard: true                # choose from [true, false, 'no']
+              port_type_fast: true            # choose from [true, false]
+              mtu: jumbo                      # choose from [default, jumbo]
+              peer1_allowed_vlans: none       # choose from [none, all, vlan range]
+              peer2_allowed_vlans: none       # choose from [none, all, vlan range]
+              peer1_description: "VPC {{pod_num}}1 - Peer 1"
+              peer2_description: "VPC {{pod_num}}1 - Peer 2"
+          ### Leaf3/4 VPC ###
+          - name: vpc{{pod_num}}1             # should be of the form vpc<port-id>
+            type: vpc                         # choose from this list [pc, vpc, sub_int, lo, eth]
+            switch:                           # provide switches of vPC pair
+              - ["100.64.201.9",
+                  "100.64.201.10"]
+            deploy: true                      # choose from [true, false]
+            profile:
+              admin_state: true               # choose from [true, false]
+              mode: trunk                     # choose from [trunk, access]
+              peer1_pcid: "{{pod_num}}1"      # choose between [Min:1, Max:4096], if not given, will be VPC port-id
+              peer2_pcid: "{{pod_num}}1"      # choose between [Min:1, Max:4096], if not given, will be VPC port-id
+              peer1_members:                  # member interfaces on peer 1
+                - "e1/{{pod_num|int + 5}}"
+              peer2_members:                  # member interfaces on peer 2
+                - "e1/{{pod_num|int + 5}}"
+              pc_mode: 'active'               # choose from ['on', 'active', 'passive']
+              bpdu_guard: true                # choose from [true, false, 'no']
+              port_type_fast: true            # choose from [true, false]
+              mtu: jumbo                      # choose from [default, jumbo]
+              peer1_allowed_vlans: none       # choose from [none, all, vlan range]
+              peer2_allowed_vlans: none       # choose from [none, all, vlan range]
+              peer1_description: "VPC {{pod_num}}1 - Peer 1"
+              peer2_description: "VPC {{pod_num}}1 - Peer 2"
+          ### Leaf5/6 VPC ###
+          - name: vpc{{pod_num}}2             # should be of the form vpc<port-id>
+            type: vpc                         # choose from this list [pc, vpc, sub_int, lo, eth]
+            switch:                           # provide switches of vPC pair
+              - ["100.64.201.11",
+                  "100.64.201.12"]
+            deploy: true                      # choose from [true, false]
+            profile:
+              admin_state: true               # choose from [true, false]
+              mode: trunk                     # choose from [trunk, access]
+              peer1_pcid: "{{pod_num}}2"      # choose between [Min:1, Max:4096], if not given, will be VPC port-id
+              peer2_pcid: "{{pod_num}}2"      # choose between [Min:1, Max:4096], if not given, will be VPC port-id
+              peer1_members:                  # member interfaces on peer 1
+                - "e1/{{pod_num|int + 5}}"
+              peer2_members:                  # member interfaces on peer 2
+                - "e1/{{pod_num|int + 5}}"
+              pc_mode: 'active'               # choose from ['on', 'active', 'passive']
+              bpdu_guard: true                # choose from [true, false, 'no']
+              port_type_fast: true            # choose from [true, false]
+              mtu: jumbo                      # choose from [default, jumbo]
+              peer1_allowed_vlans: none       # choose from [none, all, vlan range]
+              peer2_allowed_vlans: none       # choose from [none, all, vlan range]
+              peer1_description: "VPC {{pod_num}}2 - Peer 1"
+              peer2_description: "VPC {{pod_num}}2 - Peer 2"
+      ignore_errors: yes
+    - name: Create vPC interfaces in DC2
+      dcnm_interface:
+        fabric: "AUTOMATION-LAB-DC2"
+        state: merged                         # only choose from [merged, replaced, deleted, overridden, query]
+        config:
+          ### Leaf1/2 VPC ###
+          - name: vpc{{pod_num}}1             # should be of the form vpc<port-id>
+            type: vpc                         # choose from this list [pc, vpc, sub_int, lo, eth]
+            switch:                           # provide switches of vPC pair
+              - ["100.64.201.66",
+                  "100.64.201.67"]
+            deploy: true                      # choose from [true, false]
+            profile:
+              admin_state: true               # choose from [true, false]
+              mode: trunk                     # choose from [trunk, access]
+              peer1_pcid: "{{pod_num}}1"      # choose between [Min:1, Max:4096], if not given, will be VPC port-id
+              peer2_pcid: "{{pod_num}}1"      # choose between [Min:1, Max:4096], if not given, will be VPC port-id
+              peer1_members:                  # member interfaces on peer 1
+                - "e1/{{pod_num|int + 5}}"
+              peer2_members:                  # member interfaces on peer 2
+                - "e1/{{pod_num|int + 5}}"
+              pc_mode: 'active'               # choose from ['on', 'active', 'passive']
+              bpdu_guard: true                # choose from [true, false, 'no']
+              port_type_fast: true            # choose from [true, false]
+              mtu: jumbo                      # choose from [default, jumbo]
+              peer1_allowed_vlans: none       # choose from [none, all, vlan range]
+              peer2_allowed_vlans: none       # choose from [none, all, vlan range]
+              peer1_description: "VPC {{pod_num}}1 - Peer 1"
+              peer2_description: "VPC {{pod_num}}1 - Peer 2"
+      ignore_errors: yes

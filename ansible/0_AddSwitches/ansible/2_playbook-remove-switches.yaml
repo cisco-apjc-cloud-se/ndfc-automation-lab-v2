@@ -1,0 +1,46 @@
+---
+- name: IaC Workshop - Remove switches from fabric
+  hosts: ndfc
+  gather_facts: false
+  connection: httpapi
+  collections:
+    - cisco.dcnm
+  vars_prompt:
+    - name: leaf1_seed_ip
+      prompt: Please enter your DC1-LEAF1 Management0 IP address (Seed IP)?
+      private: no
+    - name: leaf2_seed_ip
+      prompt: Please enter your DC1-LEAF2 Management0 IP address (Seed IP)?
+      private: no
+  vars:
+    username: "admin"
+    password: "C!sco123"
+    ansible_command_timeout: 1000 # requried for dcnm_inventory
+    ansible_connect_timeout: 1000 # requried for dcnm_inventory
+  tasks:
+    - name: Confirm Deletion
+      pause:
+        prompt: "Are you sure you want remove switches {{leaf1_seed_ip}} and {{leaf2_seed_ip}}? (yes/no)"
+      register: confirm_delete
+    - name: Remove Switches from DC1
+      cisco.dcnm.dcnm_inventory:
+        fabric: "AUTOMATION-LAB-DC1"
+        state: deleted # merged / deleted / overridden / query
+        config:
+          ## DC1-LEAF1
+        - seed_ip: "{{leaf1_seed_ip}}"
+          auth_proto: MD5 # choose from [MD5, SHA, MD5_DES, MD5_AES, SHA_DES, SHA_AES]
+          user_name: "{{username}}"
+          password: "{{password}}"
+          max_hops: 0
+          role: leaf
+          preserve_config: false # boolean, default is  true
+          ## DC1-LEAF2
+        - seed_ip: "{{leaf2_seed_ip}}"
+          auth_proto: MD5 # choose from [MD5, SHA, MD5_DES, MD5_AES, SHA_DES, SHA_AES]
+          user_name: "{{username}}"
+          password: "{{password}}"
+          max_hops: 0
+          role: leaf
+          preserve_config: false # boolean, default is  true
+      when: confirm_delete.user_input | bool

@@ -1,0 +1,4 @@
+- include_tasks: edit-interface-tasks.yaml
+  loop: "{{vpc.ports}}"
+  loop_control:
+    loop_var: port
