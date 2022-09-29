@@ -92,11 +92,15 @@ resource "dcnm_vrf" "vrf-1" {
     vlan_id = format("1%d0", var.pod_num)
     attach = true
     # vrf_lite {
+    #   auto_vrf_lite_flag = false
     #   peer_vrf_name = "global"
     #   interface_name = "Ethernet1/5"
     #   dot1q_id = format("%d1", var.pod_num)
     #   neighbor_ip = format("10.255.10%d.10", var.pod_num)
+    #   neighbor_asn = 65010
     #   ip_mask = format("10.255.10%d.9/30", var.pod_num)
+    #   ipv6_mask = null
+    #   ipv6_neighbor = null
     # }
   }
 
@@ -105,11 +109,15 @@ resource "dcnm_vrf" "vrf-1" {
     vlan_id = format("1%d0", var.pod_num)
     attach = true
     # vrf_lite {
+    #   auto_vrf_lite_flag = false
     #   peer_vrf_name = "global"
     #   interface_name = "Ethernet1/5"
     #   dot1q_id = format("%d1", var.pod_num)
     #   neighbor_ip = format("10.255.10%d.14", var.pod_num)
+    #   neighbor_asn = 65010
     #   ip_mask = format("10.255.10%d.13/30", var.pod_num)
+    #   ipv6_mask = null
+    #   ipv6_neighbor = null
     # }
   }
 
