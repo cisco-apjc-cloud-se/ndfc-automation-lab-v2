@@ -4,10 +4,11 @@ Ansible and Terraform code for use with a NDFC-built NXOS VXLAN EVPN multi-site 
 
 ## Ansible
 
-Install Python3 from https://www.python.org/downloads/
+Install Python3 from <https://www.python.org/downloads/>
 
-Install client side libraries in a Python virtual environment. 
-```
+Install client side libraries in a Python virtual environment.
+
+```bash
 # python3 -m venv venv
 # source venv/bin/activate
 (venv) # python3 -m pip install --upgrade pip
@@ -17,4 +18,4 @@ Install client side libraries in a Python virtual environment.
 
 ## Terraform
 
-Install Terraform binary from https://www.terraform.io/downloads
+Install Terraform binary from <https://www.terraform.io/downloads>
