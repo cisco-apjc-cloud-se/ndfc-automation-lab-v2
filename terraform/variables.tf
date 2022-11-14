@@ -19,11 +19,6 @@ variable "platform" {
   type = string
 }
 
-### Pod Number ###
-variable "pod_num" {
-  type = number
-}
-
 ### Switches Object for Name to Serial Lookup ###
 variable "switches" {
   type = map(object({
