@@ -1,0 +1,13 @@
+all:
+  vars:
+    ansible_user: "admin"
+    ansible_password: "C!sco123"
+    ansible_connection: ansible.netcommon.httpapi
+    ansible_python_interpreter: python
+    ansible_httpapi_validate_certs: False
+    ansible_httpapi_use_ssl: True
+  children:
+    ndfc:
+      hosts:
+        nd-n1.mel.ciscolabs.com:
+            ansible_network_os: cisco.dcnm.dcnm
