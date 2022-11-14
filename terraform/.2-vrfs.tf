@@ -189,7 +189,7 @@ resource "dcnm_vrf" "vrf-2" {
     #   auto_vrf_lite_flag = false
     #   peer_vrf_name = "global"
     #   interface_name = "Ethernet1/5"
-    #   dot1q_id = 11
+    #   dot1q_id = 12
     #   neighbor_ip = "192.168.253.250"
     #   neighbor_asn = 65010
     #   ip_mask = "192.168.253.249/30"
