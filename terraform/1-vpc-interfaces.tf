@@ -13,8 +13,8 @@ resource "dcnm_interface" "vpc-vrf1-net1-host1" {
   mtu                     = "default"
   vpc_peer1_allowed_vlans = "none"
   vpc_peer2_allowed_vlans = "none"
-  vpc_peer1_interface     = [E1/5]  # Expects list
-  vpc_peer2_interface     = [E1/5]  # Expects list
+  vpc_peer1_interface     = ["E1/5"]  # Expects list
+  vpc_peer2_interface     = ["E1/5"]  # Expects list
   vpc_peer1_desc          = "VPC11 - VRF1-NET1-HOST1 - Peer 1"
   vpc_peer2_desc          = "VPC11 - VRF1-NET1-HOST1 - Peer 2"
 }
@@ -33,8 +33,8 @@ resource "dcnm_interface" "vpc-vrf1-net2-host1" {
   mtu                     = "default"
   vpc_peer1_allowed_vlans = "none"
   vpc_peer2_allowed_vlans = "none"
-  vpc_peer1_interface     = [E1/6]  # Expects list
-  vpc_peer2_interface     = [E1/6]  # Expects list
+  vpc_peer1_interface     = ["E1/6"]  # Expects list
+  vpc_peer2_interface     = ["E1/6"]  # Expects list
   vpc_peer1_desc          = "VPC12 - VRF1-NET2-HOST1 - Peer 1"
   vpc_peer2_desc          = "VPC12 - VRF1-NET2-HOST1 - Peer 2"
 }
@@ -53,8 +53,8 @@ resource "dcnm_interface" "vpc-vrf1-net1-host2" {
   mtu                     = "default"
   vpc_peer1_allowed_vlans = "none"
   vpc_peer2_allowed_vlans = "none"
-  vpc_peer1_interface     = [E1/5]  # Expects list
-  vpc_peer2_interface     = [E1/5]  # Expects list
+  vpc_peer1_interface     = ["E1/5"]  # Expects list
+  vpc_peer2_interface     = ["E1/5"]  # Expects list
   vpc_peer1_desc          = "VPC11 - VRF1-NET1-HOST2 - Peer 1"
   vpc_peer2_desc          = "VPC11 - VRF1-NET1-HOST2 - Peer 2"
 }
@@ -73,8 +73,8 @@ resource "dcnm_interface" "vpc-vrf2-net1-host1" {
   mtu                     = "default"
   vpc_peer1_allowed_vlans = "none"
   vpc_peer2_allowed_vlans = "none"
-  vpc_peer1_interface     = [E1/7]  # Expects list
-  vpc_peer2_interface     = [E1/7]  # Expects list
+  vpc_peer1_interface     = ["E1/7"]  # Expects list
+  vpc_peer2_interface     = ["E1/7"]  # Expects list
   vpc_peer1_desc          = "VPC13 - VRF2-NET1-HOST1 - Peer 1"
   vpc_peer2_desc          = "VPC13 - VRF2-NET1-HOST1 - Peer 2"
 }
@@ -93,8 +93,8 @@ resource "dcnm_interface" "vpc-vrf1-net2-host2" {
   mtu                     = "default"
   vpc_peer1_allowed_vlans = "none"
   vpc_peer2_allowed_vlans = "none"
-  vpc_peer1_interface     = [E1/6]  # Expects list
-  vpc_peer2_interface     = [E1/6]  # Expects list
+  vpc_peer1_interface     = ["E1/6"]  # Expects list
+  vpc_peer2_interface     = ["E1/6"]  # Expects list
   vpc_peer1_desc          = "VPC12 - VRF1-NET2-HOST2 - Peer 1"
   vpc_peer2_desc          = "VPC12 - VRF1-NET2-HOST2 - Peer 2"
 }
@@ -113,8 +113,8 @@ resource "dcnm_interface" "vpc-vrf2-net1-host2" {
   mtu                     = "default"
   vpc_peer1_allowed_vlans = "none"
   vpc_peer2_allowed_vlans = "none"
-  vpc_peer1_interface     = [E1/7]  # Expects list
-  vpc_peer2_interface     = [E1/7]  # Expects list
+  vpc_peer1_interface     = ["E1/7"]  # Expects list
+  vpc_peer2_interface     = ["E1/7"]  # Expects list
   vpc_peer1_desc          = "VPC13 - VRF2-NET1-HOST2 - Peer 1"
   vpc_peer2_desc          = "VPC13 - VRF2-NET1-HOST2 - Peer 2"
 }
