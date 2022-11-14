@@ -6,28 +6,29 @@
   collections:
     - cisco.dcnm
   vars_prompt:
-    - name: dc_num
-      prompt: Please enter DC number
-      private: false
-    - name: mgmt_gw
-      prompt: Please enter OOB-MGMT vlan IP address
-      private: false
-    - name: dhcp_start
-      prompt: Please enter DHCP range start IP address
-      private: false
-    - name: dhcp_stop
-      prompt: Please enter DHCP range stop IP address
-      private: false
+    # - name: dc_num
+    #   prompt: Please enter DC number
+    #   private: false
+    # - name: mgmt_gw
+    #   prompt: Please enter OOB-MGMT vlan IP address
+    #   private: false
+    # - name: dhcp_start
+    #   prompt: Please enter DHCP range start IP address
+    #   private: false
+    # - name: dhcp_stop
+    #   prompt: Please enter DHCP range stop IP address
+    #   private: false
   #   - name: pod_num
   #     prompt: Please enter Pod number (0-9)?
   #     private: no
   tasks:
     - name: Build 1st DC JSON Payload from Template
-      # vars:
-      #   dc_num: 1
-      #   mgmt_gw: "100.64.201.1"
-      #   dhcp_start: "100.64.201.34"
-      #   dhcp_stop: "100.64.201.62"
+      vars:
+        dc_num: 1
+        mgmt_gw: "198.18.192.1"
+        dhcp_start: "198.18.192.192"
+        dhcp_stop: "198.18.192.253"
+        prefix: 24
       ansible.builtin.set_fact:
         payload: "{{ lookup('ansible.builtin.template', './fabric_json.j2') }}" # | to_json
     - name: JSON Payload
@@ -42,9 +43,10 @@
     - name: Build 2nd DC JSON Payload from Template
       vars:
         dc_num: 2
-        mgmt_gw: "100.64.201.65"
-        dhcp_start: "100.64.201.98"
-        dhcp_stop: "100.64.201.126"
+        mgmt_gw: "198.18.193.1"
+        dhcp_start: "198.18.193.192"
+        dhcp_stop: "198.18.193.253"
+        prefix: 24
       ansible.builtin.set_fact:
         payload: "{{ lookup('ansible.builtin.template', './fabric_json.j2') }}" # | to_json
     - name: JSON Payload

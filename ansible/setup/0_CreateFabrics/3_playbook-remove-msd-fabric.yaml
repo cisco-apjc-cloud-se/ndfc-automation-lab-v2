@@ -11,7 +11,7 @@
   #     private: no
   tasks:
     - name: Confirm Deletion
-      pause:
+      ansible.builtin.pause:
         prompt: "Are you sure you want remove the Automation Lab MSD fabric? (yes/no)"
       register: confirm_delete
     # - name: Build Ext Fabric JSON Payload

@@ -21,7 +21,7 @@
     - name: Filter Result for Links to WAN Fabric
       vars:
         data: []
-      set_fact:
+      ansible.builtin.set_fact:
         data: "{{ data + [item] }}"
       when: item['sw2-info']['fabric-name'] == "AUTOMATION-LAB-WAN" or item['sw1-info']['fabric-name'] == "AUTOMATION-LAB-WAN"
       loop: "{{ links.response.DATA }}"
@@ -33,7 +33,7 @@
     #     test: "AUTOMATION-LAB-DC1<->AUTOMATION-LAB-WAN"
     #     reverse_test: "AUTOMATION-LAB-WAN<->AUTOMATION-LAB-DC1"
     - name: Filter Result for DC1 Links
-      set_fact:
+      ansible.builtin.set_fact:
         dc1_wan_links: "{{ dc1_wan_links + [item] }}"
       loop: "{{ data }}"
       when: item['sw2-info']['fabric-name'] == "AUTOMATION-LAB-DC1" or item['sw1-info']['fabric-name'] == "AUTOMATION-LAB-DC1"
@@ -42,7 +42,7 @@
         dc_num: 1
         offset: 0
       include_tasks: modify-link-template-tasks.yaml
-      loop: "{{dc1_wan_links | sort(attribute='sw1-info.sw-sys-name') }}"
+      loop: "{{ dc1_wan_links | sort(attribute='sw1-info.sw-sys-name') }}"
       loop_control:
         index_var: idx
     # - name: Set conditional
@@ -54,15 +54,24 @@
         dc2_wan_links: "{{ dc2_wan_links + [item] }}"
       loop: "{{ data }}"
       when: item['sw2-info']['fabric-name'] == "AUTOMATION-LAB-DC2" or item['sw1-info']['fabric-name'] == "AUTOMATION-LAB-DC2"
+    # - name: Test Result for DC2 Links
+    #   ansible.builtin.debug:
+    #     msg: "{{ dc2_wan_links }} ==== {{ item }}"
+    #   loop: "{{ data }}"
+    #   when: item['sw2-info']['fabric-name'] == "AUTOMATION-LAB-DC2" or item['sw1-info']['fabric-name'] == "AUTOMATION-LAB-DC2"
+    - name: Display dc2_wan_links
+      ansible.builtin.debug:
+        msg: "{{ dc2_wan_links }}"
     - name: Modify Link Template for VRF Lite Peering
       vars:
         dc_num: 2
         offset: 2
       include_tasks: modify-link-template-tasks.yaml
-      loop: "{{dc2_wan_links | sort(attribute='sw1-info.sw-sys-name') }}" ## sort won't be accurate
+      loop: "{{ dc2_wan_links | sort(attribute='sw1-info.sw-sys-name') }}" ## sort won't be accurate
       loop_control:
         index_var: idx
       ignore_errors: true
+  #
     # # - name: Display Result DC1
     # #   ansible.builtin.debug:
     # #     msg: "{{ dc1_wan_links }}"

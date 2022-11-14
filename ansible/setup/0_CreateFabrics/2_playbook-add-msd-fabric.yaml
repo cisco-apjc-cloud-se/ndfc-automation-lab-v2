@@ -11,7 +11,7 @@
   #     private: no
   tasks:
     - name: Build MSD JSON Payload from Template
-      set_fact:
+      ansible.builtin.set_fact:
         payload: "{{ lookup('ansible.builtin.template', './msd_fabric_json.j2') }}"
     - name: JSON Payload
       ansible.builtin.debug:
