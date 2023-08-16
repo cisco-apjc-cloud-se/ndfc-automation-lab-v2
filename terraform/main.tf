@@ -7,7 +7,7 @@ terraform {
   }
 }
 
-## If using DCNM to assign VNIs use -parallelism=1
+### Note: If using DCNM to assign VNIs use -parallelism=1 flag with Terraform 
 
 provider "dcnm" {
   username = var.dcnm_user

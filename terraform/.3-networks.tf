@@ -29,7 +29,7 @@ resource "dcnm_network" "vrf1-net1" {
 
   ### Attach Network to DC1 Compute Leaves 1-4 ###
   attachments {
-    serial_number = lookup(local.serial_numbers, "DC1-LEAF-1")
+    serial_number = lookup(local.serial_numbers, "DC1-LEAF1")
     attach = true
     switch_ports  = [
       format("Port-channel%d", dcnm_interface.vpc-vrf1-net1-host1.vpc_peer1_id) ## Dependency on dcnm_interface resource
@@ -37,7 +37,7 @@ resource "dcnm_network" "vrf1-net1" {
   }
 
   attachments {
-    serial_number = lookup(local.serial_numbers, "DC1-LEAF-2")
+    serial_number = lookup(local.serial_numbers, "DC1-LEAF2")
     attach = true
     switch_ports  = [
       format("Port-channel%d", dcnm_interface.vpc-vrf1-net1-host1.vpc_peer2_id) ## Dependency on dcnm_interface resource
@@ -45,7 +45,7 @@ resource "dcnm_network" "vrf1-net1" {
   }
 
   attachments {
-    serial_number = lookup(local.serial_numbers, "DC1-LEAF-3")
+    serial_number = lookup(local.serial_numbers, "DC1-LEAF3")
     attach = true
     switch_ports  = [
       format("Port-channel%d", dcnm_interface.vpc-vrf1-net1-host2.vpc_peer1_id) ## Dependency on dcnm_interface resource
@@ -53,27 +53,29 @@ resource "dcnm_network" "vrf1-net1" {
   }
 
   attachments {
-    serial_number = lookup(local.serial_numbers, "DC1-LEAF-4")
+    serial_number = lookup(local.serial_numbers, "DC1-LEAF4")
     attach = true
     switch_ports  = [
       format("Port-channel%d", dcnm_interface.vpc-vrf1-net1-host2.vpc_peer2_id) ## Dependency on dcnm_interface resource
     ]
   }
 
+  ### NOTE: VRF1-NET1 is NOT stretched to DC2 so is not required to be deployed at DC1 BGWs
+
   # ### Attach Network to DC1 Anycast Border Gateways ###
   # attachments {
-  #   serial_number = lookup(local.serial_numbers, "DC1-ABGW-1")
+  #   serial_number = lookup(local.serial_numbers, "DC1-ABGW1")
   #   attach = true
   # }
 
   # attachments {
-  #   serial_number = lookup(local.serial_numbers, "DC1-ABGW-2")
+  #   serial_number = lookup(local.serial_numbers, "DC1-ABGW2")
   #   attach = true
   # }
 
   # ### Attach Network to DC2 vPC Border Gateways ###
   # attachments {
-  #   serial_number = lookup(local.serial_numbers, "DC2-VBGW-1")
+  #   serial_number = lookup(local.serial_numbers, "DC2-VBGW1")
   #   attach = true
   #   switch_ports  = [
   #     format("Port-channel%d", dcnm_interface.vpc-dc2-net1-svr1.vpc_peer1_id) ## Dependency on dcnm_interface resource
@@ -81,7 +83,7 @@ resource "dcnm_network" "vrf1-net1" {
   # }
 
   # attachments {
-  #   serial_number = lookup(local.serial_numbers, "DC2-VBGW-2")
+  #   serial_number = lookup(local.serial_numbers, "DC2-VBGW2")
   #   attach = true
   #   switch_ports  = [
   #     format("Port-channel%d", dcnm_interface.vpc-dc2-net1-svr1.vpc_peer2_id) ## Dependency on dcnm_interface resource
@@ -119,7 +121,7 @@ resource "dcnm_network" "vrf1-net2" {
 
   ### Attach Network to DC1 Compute Leaves 1-2 ###
   attachments {
-    serial_number = lookup(local.serial_numbers, "DC1-LEAF-1")
+    serial_number = lookup(local.serial_numbers, "DC1-LEAF1")
     attach = true
     switch_ports  = [
       format("Port-channel%d", dcnm_interface.vpc-vrf1-net2-host1.vpc_peer1_id) ## Dependency on dcnm_interface resource
@@ -127,7 +129,7 @@ resource "dcnm_network" "vrf1-net2" {
   }
 
   attachments {
-    serial_number = lookup(local.serial_numbers, "DC1-LEAF-2")
+    serial_number = lookup(local.serial_numbers, "DC1-LEAF2")
     attach = true
     switch_ports  = [
       format("Port-channel%d", dcnm_interface.vpc-vrf1-net2-host1.vpc_peer2_id) ## Dependency on dcnm_interface resource
@@ -136,18 +138,18 @@ resource "dcnm_network" "vrf1-net2" {
 
   ### Attach Network to DC1 Anycast Border Gateways ###
   attachments {
-    serial_number = lookup(local.serial_numbers, "DC1-ABGW-1")
+    serial_number = lookup(local.serial_numbers, "DC1-ABGW1")
     attach = true
   }
 
   attachments {
-    serial_number = lookup(local.serial_numbers, "DC1-ABGW-2")
+    serial_number = lookup(local.serial_numbers, "DC1-ABGW2")
     attach = true
   }
 
   ### Attach Network to DC2 vPC Border Gateways ###
   attachments {
-    serial_number = lookup(local.serial_numbers, "DC2-VBGW-1")
+    serial_number = lookup(local.serial_numbers, "DC2-VBGW1")
     attach = true
     switch_ports  = [
       format("Port-channel%d", dcnm_interface.vpc-vrf1-net2-host2.vpc_peer1_id) ## Dependency on dcnm_interface resource
@@ -155,7 +157,7 @@ resource "dcnm_network" "vrf1-net2" {
   }
 
   attachments {
-    serial_number = lookup(local.serial_numbers, "DC2-VBGW-2")
+    serial_number = lookup(local.serial_numbers, "DC2-VBGW2")
     attach = true
     switch_ports  = [
       format("Port-channel%d", dcnm_interface.vpc-vrf1-net2-host2.vpc_peer2_id) ## Dependency on dcnm_interface resource
@@ -193,7 +195,7 @@ resource "dcnm_network" "vrf2-net1" {
 
   ### Attach Network to DC1 Compute Leaves 3-4 ###
   attachments {
-    serial_number = lookup(local.serial_numbers, "DC1-LEAF-3")
+    serial_number = lookup(local.serial_numbers, "DC1-LEAF3")
     attach = true
     switch_ports  = [
       format("Port-channel%d", dcnm_interface.vpc-vrf2-net1-host1.vpc_peer1_id) ## Dependency on dcnm_interface resource
@@ -201,7 +203,7 @@ resource "dcnm_network" "vrf2-net1" {
   }
 
   attachments {
-    serial_number = lookup(local.serial_numbers, "DC1-LEAF-4")
+    serial_number = lookup(local.serial_numbers, "DC1-LEAF4")
     attach = true
     switch_ports  = [
       format("Port-channel%d", dcnm_interface.vpc-vrf2-net1-host1.vpc_peer2_id) ## Dependency on dcnm_interface resource
@@ -210,18 +212,18 @@ resource "dcnm_network" "vrf2-net1" {
 
   ### Attach Network to DC1 Anycast Border Gateways ###
   attachments {
-    serial_number = lookup(local.serial_numbers, "DC1-ABGW-1")
+    serial_number = lookup(local.serial_numbers, "DC1-ABGW1")
     attach = true
   }
 
   attachments {
-    serial_number = lookup(local.serial_numbers, "DC1-ABGW-2")
+    serial_number = lookup(local.serial_numbers, "DC1-ABGW2")
     attach = true
   }
 
   ### Attach Network to DC2 vPC Border Gateways ###
   attachments {
-    serial_number = lookup(local.serial_numbers, "DC2-VBGW-1")
+    serial_number = lookup(local.serial_numbers, "DC2-VBGW1")
     attach = true
     switch_ports  = [
       format("Port-channel%d", dcnm_interface.vpc-vrf2-net1-host2.vpc_peer1_id) ## Dependency on dcnm_interface resource
@@ -229,7 +231,7 @@ resource "dcnm_network" "vrf2-net1" {
   }
 
   attachments {
-    serial_number = lookup(local.serial_numbers, "DC2-VBGW-2")
+    serial_number = lookup(local.serial_numbers, "DC2-VBGW2")
     attach = true
     switch_ports  = [
       format("Port-channel%d", dcnm_interface.vpc-vrf2-net1-host2.vpc_peer2_id) ## Dependency on dcnm_interface resource
