@@ -44,34 +44,28 @@ resource "dcnm_vrf" "vrf-1" {
     serial_number = lookup(local.serial_numbers, "DC1-ABGW1")
     vlan_id       = 111
     attach        = true
-    # vrf_lite {
-    #   auto_vrf_lite_flag = false
-    #   peer_vrf_name = "global"
-    #   interface_name = "Ethernet1/6"
-    #   dot1q_id = 11
-    #   neighbor_ip = "192.168.254.254"
-    #   neighbor_asn = 65100
-    #   ip_mask = "192.168.254.253/30"
-    #   ipv6_mask = null
-    #   ipv6_neighbor = null
-    # }
+    vrf_lite {
+      peer_vrf_name = "global"
+      interface_name = "Ethernet1/6"
+      dot1q_id = 11
+      neighbor_ip = "192.168.254.254"
+      neighbor_asn = 65100
+      ip_mask = "192.168.254.253/30"
+    }
   }
 
   attachments {
     serial_number = lookup(local.serial_numbers, "DC1-ABGW2")
     vlan_id       = 111
     attach        = true
-    # vrf_lite {
-    #   auto_vrf_lite_flag = false
-    #   peer_vrf_name = "global"
-    #   interface_name = "Ethernet1/6"
-    #   dot1q_id = 11
-    #   neighbor_ip = "192.168.254.250"
-    #   neighbor_asn = 65100
-    #   ip_mask = "192.168.254.249/30"
-    #   ipv6_mask = null
-    #   ipv6_neighbor = null
-    # }
+    vrf_lite {
+      peer_vrf_name = "global"
+      interface_name = "Ethernet1/6"
+      dot1q_id = 11
+      neighbor_ip = "192.168.254.250"
+      neighbor_asn = 65100
+      ip_mask = "192.168.254.249/30"
+    }
   }
 
   ### Attach VRF to DC2 vPC Border Gateways ###
@@ -80,15 +74,12 @@ resource "dcnm_vrf" "vrf-1" {
     vlan_id = 111
     attach = true
     # vrf_lite {
-    #   auto_vrf_lite_flag = false
     #   peer_vrf_name = "global"
     #   interface_name = "Ethernet1/6"
     #   dot1q_id = 11
     #   neighbor_ip = "192.168.254.246"
     #   neighbor_asn = 65100
     #   ip_mask = "192.168.254.245/30"
-    #   ipv6_mask = null
-    #   ipv6_neighbor = null
     # }
   }
 
@@ -97,15 +88,12 @@ resource "dcnm_vrf" "vrf-1" {
     vlan_id = 111
     attach = true
     # vrf_lite {
-    #   auto_vrf_lite_flag = false
     #   peer_vrf_name = "global"
-    #   interface_name = "Ethernet1/5"
+    #   interface_name = "Ethernet1/6"
     #   dot1q_id = 11
     #   neighbor_ip = "192.168.254.242"
     #   neighbor_asn = 65100
     #   ip_mask = "192.168.254.241/30"
-    #   ipv6_mask = null
-    #   ipv6_neighbor = null
     # }
   }
 
@@ -144,34 +132,28 @@ resource "dcnm_vrf" "vrf-2" {
     serial_number = lookup(local.serial_numbers, "DC1-ABGW1")
     vlan_id       = 112
     attach        = true
-    # vrf_lite {
-    #   auto_vrf_lite_flag = false
-    #   peer_vrf_name = "global"
-    #   interface_name = "Ethernet1/6"
-    #   dot1q_id = 12
-    #   neighbor_ip = "192.168.253.254"
-    #   neighbor_asn = 65100
-    #   ip_mask = "192.168.253.253/30"
-    #   ipv6_mask = null
-    #   ipv6_neighbor = null
-    # }
+    vrf_lite {
+      peer_vrf_name = "global"
+      interface_name = "Ethernet1/6"
+      dot1q_id = 12
+      neighbor_ip = "192.168.253.254"
+      neighbor_asn = 65100
+      ip_mask = "192.168.253.253/30"
+    }
   }
 
   attachments {
     serial_number = lookup(local.serial_numbers, "DC1-ABGW2")
     vlan_id       = 112
     attach        = true
-    # vrf_lite {
-    #   auto_vrf_lite_flag = false
-    #   peer_vrf_name = "global"
-    #   interface_name = "Ethernet1/6"
-    #   dot1q_id = 12
-    #   neighbor_ip = "192.168.253.250"
-    #   neighbor_asn = 65100
-    #   ip_mask = "192.168.253.249/30"
-    #   ipv6_mask = null
-    #   ipv6_neighbor = null
-    # }
+    vrf_lite {
+      peer_vrf_name = "global"
+      interface_name = "Ethernet1/6"
+      dot1q_id = 12
+      neighbor_ip = "192.168.253.250"
+      neighbor_asn = 65100
+      ip_mask = "192.168.253.249/30"
+    }
   }
 
   ### Attach VRF to DC2 vPC Border Gateways ###
@@ -180,15 +162,12 @@ resource "dcnm_vrf" "vrf-2" {
     vlan_id = 112
     attach = true
     # vrf_lite {
-    #   auto_vrf_lite_flag = false
     #   peer_vrf_name = "global"
     #   interface_name = "Ethernet1/6"
     #   dot1q_id = 12
     #   neighbor_ip = "192.168.253.246"
     #   neighbor_asn = 65100
     #   ip_mask = "192.168.253.245/30"
-    #   ipv6_mask = null
-    #   ipv6_neighbor = null
     # }
   }
 
@@ -197,15 +176,12 @@ resource "dcnm_vrf" "vrf-2" {
     vlan_id = 112
     attach = true
     # vrf_lite {
-    #   auto_vrf_lite_flag = false
     #   peer_vrf_name = "global"
     #   interface_name = "Ethernet1/6"
     #   dot1q_id = 12
     #   neighbor_ip = "192.168.253.242"
     #   neighbor_asn = 65100
     #   ip_mask = "192.168.253.241/30"
-    #   ipv6_mask = null
-    #   ipv6_neighbor = null
     # }
   }
 
